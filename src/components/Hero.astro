@@ -25,6 +25,59 @@ import '../styles/card-stack.css';
 
     <div class="card-stack-hero__viewport" aria-hidden="true">
       <div class="card-stack-hero__plane" id="hero-card-plane"></div>
+
+      <div class="card-stack-hero__match-labels" id="hero-match-labels" aria-hidden="true">
+        <div class="card-stack-hero__match card-stack-hero__match--good">
+          <span class="card-stack-hero__match-text">Ok match</span>
+          <svg
+            class="card-stack-hero__match-arrow"
+            viewBox="0 0 160 112"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M150 20 C 92 4, 52 40, 46 102"
+              stroke="currentColor"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+            <path
+              d="M46 102 L 35 85 M 46 102 L 63 94"
+              stroke="currentColor"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
+        </div>
+
+        <div class="card-stack-hero__match card-stack-hero__match--great">
+          <svg
+            class="card-stack-hero__match-arrow"
+            viewBox="0 0 132 164"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M40 156 C 70 122, 56 64, 100 22"
+              stroke="currentColor"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+            <path
+              d="M100 22 L 84 26 M 100 22 L 98 41"
+              stroke="currentColor"
+              stroke-width="4"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            ></path>
+          </svg>
+          <span class="card-stack-hero__match-text">Great match</span>
+        </div>
+      </div>
+
       <div class="card-stack-hero__hint" id="hero-card-hint">
         <span>Scroll</span>
         <svg

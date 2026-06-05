@@ -158,6 +158,95 @@
   opacity: 0;
 }
 
+/* Match annotations — fade in at end of scroll animation */
+.card-stack-hero__match-labels {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  opacity: 0;
+  will-change: opacity;
+}
+
+/* Each label is a 0-size anchor placed at its arrow's TIP point.
+   The hero card ends up centred in the viewport, so we anchor to centre
+   (50%/50%) and offset toward the card edges with vmin units that track
+   the card as it scales with the viewport. */
+.card-stack-hero__match {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  font-family: var(--font-display, ui-sans-serif, system-ui, sans-serif);
+  font-size: clamp(1.0625rem, 2.6vmin, 1.5rem);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1;
+  will-change: opacity, transform;
+}
+
+/* Good pairing — green; Great pairing — blue */
+.card-stack-hero__match--good {
+  color: #1f9d55;
+}
+
+.card-stack-hero__match--great {
+  color: #2563eb;
+}
+
+.card-stack-hero__match-arrow {
+  position: absolute;
+  height: auto;
+  overflow: visible;
+}
+
+.card-stack-hero__match-text {
+  position: absolute;
+  white-space: nowrap;
+}
+
+/* Ok match — long curve sweeping from the upper-right down to a tip that
+   sits just ABOVE the card's top edge, LEFT of centre. */
+.card-stack-hero__match--good {
+  --ok-arrow-w: clamp(112px, 17vmin, 172px);
+  left: calc(50% - 6vmin);
+  top: calc(50% - 16vmin);
+  transform: translateY(var(--match-offset-y, 0px));
+}
+
+.card-stack-hero__match--good .card-stack-hero__match-arrow {
+  width: var(--ok-arrow-w);
+  /* place svg so its tip (≈46,102 in viewBox 0 0 160 112) lands on (0,0) */
+  left: calc(var(--ok-arrow-w) * -0.2875);
+  top: calc(var(--ok-arrow-w) * -0.6375);
+}
+
+.card-stack-hero__match--good .card-stack-hero__match-text {
+  left: calc(var(--ok-arrow-w) * 0.5);
+  top: calc(var(--ok-arrow-w) * -0.82);
+}
+
+/* Great match — long curve rising from below the card (centre-bottom) up
+   to a tip OVER the front card's lower-right area. */
+.card-stack-hero__match--great {
+  --great-arrow-w: clamp(104px, 15vmin, 156px);
+  left: calc(50% + 9.5vmin);
+  top: calc(50% + 9vmin);
+  transform: translateY(var(--match-offset-y, 0px));
+}
+
+.card-stack-hero__match--great .card-stack-hero__match-arrow {
+  width: var(--great-arrow-w);
+  /* place svg so its tip (≈100,22 in viewBox 0 0 132 164) lands on (0,0) */
+  left: calc(var(--great-arrow-w) * -0.7576);
+  top: calc(var(--great-arrow-w) * -0.1667);
+}
+
+.card-stack-hero__match--great .card-stack-hero__match-text {
+  left: calc(var(--great-arrow-w) * -0.46);
+  top: calc(var(--great-arrow-w) * 0.92);
+}
+
 .card-stack-hero__hint {
   position: absolute;
   left: 50%;
@@ -215,6 +304,15 @@
     padding-bottom: 2rem;
     opacity: 1;
     transform: none;
+  }
+
+  .card-stack-hero__match-labels,
+  .card-stack-hero__match {
+    opacity: 1;
+  }
+
+  .card-stack-hero__match--great {
+    --match-offset-y: 0px;
   }
 
   .card-stack-hero__hint svg {
