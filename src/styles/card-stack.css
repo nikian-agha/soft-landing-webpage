@@ -76,11 +76,11 @@
   visibility: hidden;
 }
 
-/* End headline — pinned in the bottom quarter of the viewport */
+/* End headline — pinned at the top of the viewport */
 .card-stack-hero__end-copy {
   position: absolute;
   inset-inline: 0;
-  bottom: 0;
+  top: 0;
   height: 147px;
   z-index: 15;
   display: flex;
@@ -212,8 +212,7 @@
 
   .card-stack-hero__end-copy {
     position: relative;
-    top: auto;
-    padding-top: 2rem;
+    padding-bottom: 2rem;
     opacity: 1;
     transform: none;
   }

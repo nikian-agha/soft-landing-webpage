@@ -31,51 +31,52 @@ const features: Feature[] = [
     data-scroll-carousel
     data-carousel
   >
-    <div class="sticky top-0 z-10 flex h-fit w-full min-w-0 flex-col justify-center overflow-x-clip bg-paper py-[154px]">
+    <div class="sticky top-0 z-10 flex h-[100svh] w-full min-w-0 flex-col overflow-x-clip bg-paper">
+      <!-- mt clears the overlapping CTA bar; flex-1 fills space above dots; mb-8 = 32px gap to dots -->
       <div
-        class="snap-row flex h-[617px] w-full min-w-0 gap-[75px] overflow-x-hidden px-5 py-[30px] sm:px-8"
+        class="snap-row flex min-h-0 w-full min-w-0 flex-1 gap-[75px] overflow-x-hidden px-5 py-[45px] sm:px-8 mt-[var(--features-cta-sticky-h,6.625rem)] mb-8"
         data-track
       >
-      <!-- leading spacer keeps the first card centred on wide screens -->
-      <div class="hidden flex-none lg:block lg:w-[calc((100vw-min(100vw,72rem))/2)]" aria-hidden="true"></div>
+        <!-- leading spacer keeps the first card centred on wide screens -->
+        <div class="hidden flex-none lg:block lg:w-[calc((100vw-min(100vw,72rem))/2)]" aria-hidden="true"></div>
 
-      {
-        features.map((f, i) => (
-          <article
-            class="group flex h-full w-[min(86vw,40rem)] flex-none flex-col rounded-[var(--radius-card)] bg-card p-9 transition-shadow duration-500 ease-[var(--ease-out-soft)] hover:shadow-[0_10px_28px_-6px_rgba(16,16,16,0.12)] sm:w-[min(78vw,40rem)] sm:p-12"
-            data-slide
-            data-index={i}
-          >
-            <div class="flex flex-1 flex-col justify-start items-start">
-              <h3 class="w-full min-h-[5.5rem] text-balance text-2xl font-bold leading-[1.25] sm:text-[35px]">
-                {f.title}
-              </h3>
-              <p class="mt-4 w-full text-lg leading-relaxed text-muted">{f.body}</p>
-            </div>
-          </article>
-        ))
-      }
-
-      <!-- trailing spacer -->
-      <div class="hidden flex-none lg:block lg:w-[calc((100vw-min(100vw,72rem))/2)]" aria-hidden="true"></div>
-    </div>
-
-    <!-- Controls -->
-    <div class="mt-8 flex items-center justify-center">
-      <div class="flex items-center gap-2.5" data-dots role="tablist" aria-label="Choose a feature">
         {
-          features.map((_, i) => (
-            <button
-              type="button"
-              data-dot={i}
-              role="tab"
-              aria-label={`Go to feature ${i + 1}`}
-              class="h-2.5 rounded-full bg-ink/20 transition-all duration-300 ease-[var(--ease-out-soft)] data-[active]:w-7 data-[active]:bg-ink w-2.5"
-            />
+          features.map((f, i) => (
+            <article
+              class="group flex h-full w-[min(86vw,40rem)] flex-none flex-col rounded-[var(--radius-card)] bg-card p-9 transition-shadow duration-500 ease-[var(--ease-out-soft)] hover:shadow-[0_10px_28px_-6px_rgba(16,16,16,0.12)] sm:w-[min(78vw,40rem)] sm:p-12"
+              data-slide
+              data-index={i}
+            >
+              <div class="flex h-full min-h-0 flex-1 flex-col justify-start items-start">
+                <h3 class="w-full min-h-[clamp(3.5rem,12svh,5.5rem)] text-balance text-2xl font-bold leading-[1.25] sm:text-[35px]">
+                  {f.title}
+                </h3>
+                <p class="mt-4 w-full text-lg leading-relaxed text-muted">{f.body}</p>
+              </div>
+            </article>
           ))
         }
+
+        <!-- trailing spacer -->
+        <div class="hidden flex-none lg:block lg:w-[calc((100vw-min(100vw,72rem))/2)]" aria-hidden="true"></div>
       </div>
-    </div>
+
+      <!-- Controls -->
+      <div class="flex shrink-0 items-center justify-center py-0 pb-[clamp(1rem,3svh,2rem)]">
+        <div class="flex items-center gap-2.5" data-dots role="tablist" aria-label="Choose a feature">
+          {
+            features.map((_, i) => (
+              <button
+                type="button"
+                data-dot={i}
+                role="tab"
+                aria-label={`Go to feature ${i + 1}`}
+                class="h-2.5 rounded-full bg-ink/20 transition-all duration-300 ease-[var(--ease-out-soft)] data-[active]:w-7 data-[active]:bg-ink w-2.5"
+              />
+            ))
+          }
+        </div>
+      </div>
     </div>
   </div>
 </section>
