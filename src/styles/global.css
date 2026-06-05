@@ -1,0 +1,110 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "AM Le Cygne Clair";
+  src: url("/fonts/AMLeCygne-Clair.otf") format("opentype");
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* ------------------------------------------------------------------ *
+ * Design tokens (extracted from the Soft Landing Figma wireframes)
+ * ------------------------------------------------------------------ */
+@theme {
+  /* Type */
+  --font-display: "League Spartan Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Lora Variable", Georgia, "Times New Roman", serif;
+  --font-hero: "AM Le Cygne Clair", var(--font-serif);
+
+  /* Colour */
+  --color-ink: #101010;
+  --color-paper: #ffffff;
+  --color-card: #f3f3f3;
+  --color-cream: #fbf1e7;
+  --color-muted: #6b6b6b;
+  --color-line: #e7e1d8;
+
+  /* Radii */
+  --radius-card: 2.75rem; /* ~47px */
+  --radius-pill: 100px;
+
+  /* Easing */
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    font-family: var(--font-display);
+    color: var(--color-ink);
+    background: var(--color-paper);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: 0.01em;
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: #fff;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+    text-wrap: balance;
+  }
+
+  /* Lora reads a touch loose at display sizes; tighten h1/h2 slightly. */
+  h1, h2 {
+    letter-spacing: -0.005em;
+  }
+
+  h3 {
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Scroll-reveal — pure CSS, toggled by an IntersectionObserver.
+ * Falls back to fully visible when JS or motion is unavailable.
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+      opacity 0.8s var(--ease-out-soft),
+      transform 0.8s var(--ease-out-soft);
+    transition-delay: var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+  }
+
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * Carousel — native scroll-snap (GPU-smooth, momentum on touch).
+ * ------------------------------------------------------------------ */
+.snap-row {
+  scrollbar-width: none;
+}
+.snap-row::-webkit-scrollbar {
+  display: none;
+}

@@ -1,0 +1,63 @@
+---
+interface Quote {
+  quote: string;
+  name: string;
+  meta: string;
+  tone: string; // avatar gradient
+}
+
+const quotes: Quote[] = [
+  {
+    quote: 'The limitless filter preferences you can add are amazing.',
+    name: 'Aliksandir',
+    meta: 'Renting · East London',
+    tone: 'from-[#ffd6a5] to-[#ff9e6d]',
+  },
+  {
+    quote: 'You’ve thought of everything! My commute, the tube map, nearest supermarkets…',
+    name: 'Sam',
+    meta: 'First-time buyer · Manchester',
+    tone: 'from-[#bde0fe] to-[#7aa5ff]',
+  },
+  {
+    quote: 'The AI property chat is super helpful. It gave me honest answers.',
+    name: 'Daniel',
+    meta: 'Relocating · Bristol',
+    tone: 'from-[#caffbf] to-[#5fd07f]',
+  },
+];
+
+const initials = (name: string) => name.slice(0, 1).toUpperCase();
+---
+
+<section id="testimonials" class="mx-auto max-w-6xl scroll-mt-24 px-5 py-20 sm:px-8 sm:py-24">
+  <h2 class="reveal text-center text-4xl font-semibold sm:text-5xl">What people are saying</h2>
+
+  <div class="mt-14 grid gap-6 md:grid-cols-3">
+    {
+      quotes.map((q, i) => (
+        <figure
+          class="reveal flex h-full flex-col justify-between rounded-[2rem] bg-card p-8 sm:p-9"
+          style={`--reveal-delay: ${i * 110}ms`}
+        >
+          <blockquote class="text-xl leading-relaxed sm:text-[1.35rem]">
+            <span class="font-serif text-3xl leading-none text-ink/30">“</span>
+            {q.quote}
+          </blockquote>
+          <figcaption class="mt-8 flex items-center gap-3.5">
+            <span
+              class={`flex h-12 w-12 flex-none items-center justify-center rounded-full bg-gradient-to-br ${q.tone} text-lg font-semibold text-ink/80`}
+              aria-hidden="true"
+            >
+              {initials(q.name)}
+            </span>
+            <span class="flex flex-col">
+              <span class="text-lg font-semibold leading-tight">{q.name}</span>
+              <span class="text-sm text-muted">{q.meta}</span>
+            </span>
+          </figcaption>
+        </figure>
+      ))
+    }
+  </div>
+</section>

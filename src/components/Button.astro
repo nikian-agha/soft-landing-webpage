@@ -1,0 +1,36 @@
+---
+interface Props {
+  href?: string;
+  variant?: 'dark' | 'light' | 'outline';
+  size?: 'md' | 'lg';
+  class?: string;
+}
+
+const { href = '#start', variant = 'dark', size = 'lg', class: extra = '' } = Astro.props;
+
+const base =
+  'group inline-flex items-center justify-center gap-2 rounded-[var(--radius-pill)] font-medium tracking-[0.02em] whitespace-nowrap transition-all duration-300 ease-[var(--ease-out-soft)] hover:scale-[1.03] active:scale-[0.99]';
+
+const sizes = {
+  md: 'px-6 py-2.5 text-base',
+  lg: 'px-7 py-3.5 text-lg sm:text-xl',
+};
+
+const variants = {
+  dark: 'bg-ink text-white shadow-[0_8px_24px_-12px_rgba(16,16,16,0.55)] hover:shadow-[0_14px_34px_-12px_rgba(16,16,16,0.6)]',
+  light: 'bg-white text-ink shadow-[0_8px_30px_-10px_rgba(0,0,0,0.35)] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.4)]',
+  outline: 'border border-ink/15 bg-white/0 text-ink hover:border-ink/30 hover:bg-ink/[0.03]',
+};
+---
+
+<a href={href} class={`${base} ${sizes[size]} ${variants[variant]} ${extra}`}>
+  <slot>Start Your Search</slot>
+  <svg
+    class="h-[1em] w-[1em] -translate-x-0.5 transition-transform duration-300 ease-[var(--ease-out-soft)] group-hover:translate-x-0.5"
+    viewBox="0 0 24 24"
+    fill="none"
+    aria-hidden="true"
+  >
+    <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</a>

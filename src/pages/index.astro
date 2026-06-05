@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Features from '../components/Features.astro';
+import Stats from '../components/Stats.astro';
+import Testimonials from '../components/Testimonials.astro';
+import Impartial from '../components/Impartial.astro';
+import Faq from '../components/Faq.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import Button from '../components/Button.astro';
+---
+
+<Base>
+  <main>
+    <Hero />
+    <!-- CTA sticks until #impartial ends. Negative margin pulls sections up so the
+         bar top aligns with the features sticky pane without grid min-width blowout. -->
+    <div class="relative w-full min-w-0 overflow-x-clip [--features-cta-sticky-h:6.625rem]">
+      <div
+        data-sticky-cta-bar
+        class="sticky top-0 z-50 box-content flex w-full justify-center bg-[linear-gradient(0deg,rgba(255,255,255,0)_0%,rgba(255,255,255,1)_29%)] text-[rgba(128,128,128,1)] pb-3 pt-[38px] transition-[background,background-color,box-shadow,backdrop-filter] duration-300 ease-[var(--ease-out-soft)]"
+      >
+        <Button href="#start">Start Your Search</Button>
+      </div>
+      <div class="-mt-[var(--features-cta-sticky-h)] min-w-0">
+        <Features />
+        <Stats />
+        <Testimonials />
+        <Impartial />
+      </div>
+    </div>
+    <Faq />
+    <SiteFooter />
+  </main>
+</Base>

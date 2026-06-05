@@ -1,0 +1,20 @@
+---
+interface Props {
+  class?: string;
+  tone?: 'ink' | 'white';
+}
+const { class: extra = '', tone = 'ink' } = Astro.props;
+const color = tone === 'white' ? 'text-white' : 'text-ink';
+---
+
+<a href="#top" class={`inline-flex items-center gap-2.5 ${color} ${extra}`} aria-label="Soft Landing — home">
+  <img
+    src="/Logo.png"
+    alt=""
+    width="28"
+    height="28"
+    class="h-7 w-7 rounded-md object-contain"
+    aria-hidden="true"
+  />
+  <span class="text-[1.35rem] font-semibold leading-6 tracking-[-0.01em]">Soft Landing</span>
+</a>

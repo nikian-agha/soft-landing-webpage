@@ -1,0 +1,108 @@
+---
+interface Item {
+  q: string;
+  a: string;
+}
+
+const items: Item[] = [
+  {
+    q: 'Is it free?',
+    a: 'Early access is free for initial users.',
+  },
+  {
+    q: 'What areas do you support?',
+    a: 'We’re launching in London first and will expand to other UK cities based on demand and feedback.',
+  },
+  {
+    q: 'Where do you get listings from?',
+    a: 'Right now, we focus on the largest provider which is Rightmove',
+  },
+  {
+    q: 'Is my data private & secure?',
+    a: 'Absolutely. Data we store is GDPR compliant and you’re welcome to delete everything inside your account. Our AI will also never have access to your personal identifiable information.',
+  },
+  {
+    q: 'Do I still need to call an agent?',
+    a: 'Not always, but it can help you ask better questions faster. You’ll still speak to agents, but you’ll be more prepared and know exactly what to ask.',
+  },
+];
+---
+
+<section id="faq" class="mx-auto max-w-6xl scroll-mt-24 px-5 py-16 sm:px-8 sm:py-20">
+  <div class="reveal rounded-[var(--radius-card)] bg-card p-7 sm:p-12 lg:p-16">
+    <div class="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-16">
+      <div>
+        <h2 class="text-4xl font-semibold leading-[1.05] sm:text-5xl">
+          Frequently asked questions
+        </h2>
+        <p class="mt-5 max-w-sm text-lg leading-relaxed text-muted">
+          Still wondering something?<br />
+          <a href="#start" class="font-medium text-ink underline underline-offset-4 decoration-ink/30 hover:decoration-ink">Get in touch</a> we’re happy to help.
+        </p>
+      </div>
+
+      <div data-accordion>
+        {
+          items.map((item, i) => (
+            <div class="border-t border-line last:border-b">
+              <h3>
+                <button
+                  type="button"
+                  class="group flex w-full items-center justify-between gap-6 py-5 text-left"
+                  aria-expanded={i === 0 ? 'true' : 'false'}
+                  data-acc-trigger
+                >
+                  <span class="text-lg font-medium sm:text-xl">{item.q}</span>
+                  <span
+                    class="relative flex h-6 w-6 flex-none items-center justify-center text-ink/60 transition-transform duration-300 ease-[var(--ease-out-soft)] group-aria-expanded:rotate-45"
+                    aria-hidden="true"
+                  >
+                    <span class="absolute h-0.5 w-4 rounded bg-current"></span>
+                    <span class="absolute h-4 w-0.5 rounded bg-current"></span>
+                  </span>
+                </button>
+              </h3>
+              <div
+                class="grid transition-[grid-template-rows] duration-[400ms] ease-[var(--ease-out-soft)]"
+                style={i === 0 ? 'grid-template-rows: 1fr' : 'grid-template-rows: 0fr'}
+                data-acc-panel
+              >
+                <div class="overflow-hidden">
+                  <p class="max-w-xl pb-6 text-lg leading-relaxed text-muted">{item.a}</p>
+                </div>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  for (const acc of document.querySelectorAll<HTMLElement>('[data-accordion]')) {
+    const triggers = Array.from(acc.querySelectorAll<HTMLButtonElement>('[data-acc-trigger]'));
+
+    triggers.forEach((trigger) => {
+      const panel = trigger.parentElement?.nextElementSibling as HTMLElement | null;
+      if (!panel) return;
+
+      trigger.addEventListener('click', () => {
+        const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+
+        // Single-open accordion: collapse the others.
+        if (!isOpen) {
+          triggers.forEach((other) => {
+            if (other === trigger) return;
+            other.setAttribute('aria-expanded', 'false');
+            const op = other.parentElement?.nextElementSibling as HTMLElement | null;
+            if (op) op.style.gridTemplateRows = '0fr';
+          });
+        }
+
+        trigger.setAttribute('aria-expanded', String(!isOpen));
+        panel.style.gridTemplateRows = isOpen ? '0fr' : '1fr';
+      });
+    });
+  }
+</script>

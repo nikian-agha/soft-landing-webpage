@@ -1,0 +1,209 @@
+---
+interface Feature {
+  title: string;
+  body: string;
+}
+
+const features: Feature[] = [
+  {
+    title: 'Ranks every home against all your preferences',
+    body: "Tell us what matters. We'll scrutinise and rank every listing across the web, showing you the ones worth viewing",
+  },
+  {
+    title: 'Searches 24/7, so you’re first to apply',
+    body: 'New listings are reviewed the second they go live. You hear about the best ones before the crowd does — and before they’re gone.',
+  },
+  {
+    title: 'Answers your questions instantly',
+    body: 'Ask anything about a property — the commute, the light, the lease, the neighbours — and get a straight answer in seconds, day or night.',
+  },
+  {
+    title: 'Considers where you actually want to live',
+    body: 'Commute times, your tube map, the nearest supermarket, the local vibe. Soft Landing weighs the things a listing never tells you.',
+  },
+];
+---
+
+<section id="features" class="w-full min-w-0 overflow-x-clip scroll-mt-24">
+  <!-- Carousel — vertical scroll drives horizontal movement -->
+  <div
+    class="relative h-[calc(100svh+240svh)] w-full min-w-0 overflow-x-clip"
+    data-scroll-carousel
+    data-carousel
+  >
+    <div class="sticky top-0 z-10 flex h-fit w-full min-w-0 flex-col justify-center overflow-x-clip bg-paper py-[154px]">
+      <div
+        class="snap-row flex h-[617px] w-full min-w-0 gap-[75px] overflow-x-hidden px-5 py-[30px] sm:px-8"
+        data-track
+      >
+      <!-- leading spacer keeps the first card centred on wide screens -->
+      <div class="hidden flex-none lg:block lg:w-[calc((100vw-min(100vw,72rem))/2)]" aria-hidden="true"></div>
+
+      {
+        features.map((f, i) => (
+          <article
+            class="group flex h-full w-[min(86vw,40rem)] flex-none flex-col rounded-[var(--radius-card)] bg-card p-9 transition-shadow duration-500 ease-[var(--ease-out-soft)] hover:shadow-[0_10px_28px_-6px_rgba(16,16,16,0.12)] sm:w-[min(78vw,40rem)] sm:p-12"
+            data-slide
+            data-index={i}
+          >
+            <div class="flex flex-1 flex-col justify-start items-start">
+              <h3 class="w-full min-h-[5.5rem] text-balance text-2xl font-bold leading-[1.25] sm:text-[35px]">
+                {f.title}
+              </h3>
+              <p class="mt-4 w-full text-lg leading-relaxed text-muted">{f.body}</p>
+            </div>
+          </article>
+        ))
+      }
+
+      <!-- trailing spacer -->
+      <div class="hidden flex-none lg:block lg:w-[calc((100vw-min(100vw,72rem))/2)]" aria-hidden="true"></div>
+    </div>
+
+    <!-- Controls -->
+    <div class="mt-8 flex items-center justify-center">
+      <div class="flex items-center gap-2.5" data-dots role="tablist" aria-label="Choose a feature">
+        {
+          features.map((_, i) => (
+            <button
+              type="button"
+              data-dot={i}
+              role="tab"
+              aria-label={`Go to feature ${i + 1}`}
+              class="h-2.5 rounded-full bg-ink/20 transition-all duration-300 ease-[var(--ease-out-soft)] data-[active]:w-7 data-[active]:bg-ink w-2.5"
+            />
+          ))
+        }
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  for (const root of document.querySelectorAll<HTMLElement>('[data-carousel]')) {
+    const track = root.querySelector<HTMLElement>('[data-track]');
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-slide]'));
+    const dots = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-dot]'));
+    if (!track || slides.length === 0) continue;
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const scrollDriven = root.hasAttribute('data-scroll-carousel') && !reduce;
+
+    let current = 0;
+
+    const viewportCenterX = () => window.innerWidth / 2;
+
+    /** Slide whose centre is closest to the centre of the viewport. */
+    const nearestIndex = () => {
+      const center = viewportCenterX();
+      let nearest = 0;
+      let best = Infinity;
+      slides.forEach((s, i) => {
+        const rect = s.getBoundingClientRect();
+        const slideCenter = rect.left + rect.width / 2;
+        const d = Math.abs(slideCenter - center);
+        if (d < best) {
+          best = d;
+          nearest = i;
+        }
+      });
+      return nearest;
+    };
+
+    const slideScrollLefts = () =>
+      slides.map(
+        (slide) => slide.offsetLeft - (track.clientWidth - slide.clientWidth) / 2,
+      );
+
+    const setActive = (i: number) => {
+      current = Math.max(0, Math.min(slides.length - 1, i));
+      dots.forEach((d, di) => {
+        const isActive = di === current;
+        d.toggleAttribute('data-active', isActive);
+        d.setAttribute('aria-selected', String(isActive));
+      });
+    };
+
+    const scrollRange = () => root.offsetHeight - window.innerHeight;
+
+    const pageScrollYForSlide = (index: number) => {
+      const range = scrollRange();
+      if (range <= 0) return root.offsetTop;
+      const progress = slides.length <= 1 ? 0 : index / (slides.length - 1);
+      return root.offsetTop + progress * range;
+    };
+
+    const scrollToSlide = (i: number, behavior: ScrollBehavior = 'smooth') => {
+      const clamped = Math.max(0, Math.min(slides.length - 1, i));
+
+      if (scrollDriven) {
+        window.scrollTo({ top: pageScrollYForSlide(clamped), behavior });
+        return;
+      }
+
+      const slide = slides[clamped];
+      track.scrollTo({
+        left: slide.offsetLeft - (track.clientWidth - slide.clientWidth) / 2,
+        behavior,
+      });
+      setActive(clamped);
+    };
+
+    dots.forEach((dot, i) => dot.addEventListener('click', () => scrollToSlide(i)));
+
+    if (scrollDriven) {
+      let ticking = false;
+      const updateFromPageScroll = () => {
+        ticking = false;
+        const range = scrollRange();
+        if (range <= 0) return;
+
+        const progress = Math.max(0, Math.min(1, -root.getBoundingClientRect().top / range));
+        const positions = slideScrollLefts();
+
+        if (slides.length === 1) {
+          track.scrollLeft = positions[0] ?? 0;
+        } else {
+          const scaled = progress * (slides.length - 1);
+          const low = Math.floor(scaled);
+          const high = Math.min(slides.length - 1, low + 1);
+          const t = scaled - low;
+          track.scrollLeft =
+            (positions[low] ?? 0) + t * ((positions[high] ?? 0) - (positions[low] ?? 0));
+        }
+
+        setActive(nearestIndex());
+      };
+
+      const onPageScroll = () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(updateFromPageScroll);
+        }
+      };
+
+      window.addEventListener('scroll', onPageScroll, { passive: true });
+      window.addEventListener('resize', updateFromPageScroll);
+      updateFromPageScroll();
+    } else {
+      track.classList.add('snap-x', 'snap-mandatory', 'overflow-x-auto', 'scroll-smooth', 'pb-2');
+      slides.forEach((slide) => slide.classList.add('snap-center'));
+
+      let raf = 0;
+      track.addEventListener(
+        'scroll',
+        () => {
+          if (raf) return;
+          raf = requestAnimationFrame(() => {
+            raf = 0;
+            setActive(nearestIndex());
+          });
+        },
+        { passive: true },
+      );
+    }
+
+    setActive(0);
+  }
+</script>

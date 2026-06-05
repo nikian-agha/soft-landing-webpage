@@ -1,0 +1,224 @@
+/* Scroll track height — must match CFG.trackVh in card-stack-hero.ts */
+.card-stack-hero {
+  height: 200svh;
+}
+
+/* Headline scrolls in document flow above the fixed card viewport */
+.card-stack-hero__copy {
+  position: relative;
+  z-index: 20;
+  container-type: inline-size;
+}
+
+.card-stack-hero__copy h1 {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding-inline: 52px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-wrap: balance;
+  will-change: opacity, transform;
+}
+
+@media (min-width: 768px) {
+  .card-stack-hero__copy h1 {
+    white-space: nowrap;
+    /* ~19.8px text width per 1px font-size for this copy; scales to fit container */
+    font-size: clamp(1.5rem, calc((100cqw - 104px) / 19.8), 80px);
+    line-height: 1.125;
+  }
+
+  #hero-start-copy {
+    white-space: normal;
+    /* Slightly larger than default copy scale (~60px at ~960px container) */
+    font-size: clamp(1.5rem, calc((100cqw - 104px) / 14.267), 80px);
+  }
+}
+
+/* Pinned scene: card viewport + end headline (fixed for scroll-driven animation) */
+.card-stack-hero__pin {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100svh;
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform;
+}
+
+.card-stack-hero__viewport,
+.card-stack-hero__stage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100svh;
+  pointer-events: none;
+}
+
+.card-stack-hero__viewport {
+  z-index: 0;
+  overflow: hidden;
+  perspective: 2200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-card, #f3f3f3);
+  background-image: radial-gradient(rgba(16, 16, 16, 0.08) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.card-stack-hero__stage {
+  z-index: 10;
+}
+
+.card-stack-hero.is-complete .card-stack-hero__pin {
+  visibility: hidden;
+}
+
+/* End headline — pinned in the bottom quarter of the viewport */
+.card-stack-hero__end-copy {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 147px;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  container-type: inline-size;
+  opacity: 0;
+  transform: translateY(28px);
+  will-change: opacity, transform;
+}
+
+.card-stack-hero__end-copy h1 {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding-inline: 52px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-wrap: balance;
+  white-space: normal;
+}
+
+@media (min-width: 768px) {
+  .card-stack-hero__end-copy h1 {
+    white-space: nowrap;
+    /* ~19.5px text width per 1px font-size for this copy (~44px at ~960px container) */
+    font-size: clamp(1.5rem, calc((100cqw - 104px) / 19.455), 72px);
+    line-height: 1.125;
+  }
+}
+
+.card-stack-hero__plane {
+  position: relative;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+}
+
+.card-stack-hero__card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(152px * var(--card-stack-ss, 4));
+  height: calc(106px * var(--card-stack-ss, 4));
+  margin-left: calc(-76px * var(--card-stack-ss, 4));
+  margin-top: calc(-53px * var(--card-stack-ss, 4));
+  border-radius: calc(13px * var(--card-stack-ss, 4));
+  box-shadow:
+    0 calc(8px * var(--card-stack-ss, 4)) calc(20px * var(--card-stack-ss, 4))
+      rgba(16, 16, 16, 0.1),
+    0 calc(1px * var(--card-stack-ss, 4)) calc(3px * var(--card-stack-ss, 4))
+      rgba(16, 16, 16, 0.07);
+  overflow: hidden;
+  border: calc(1px * var(--card-stack-ss, 4)) solid #6b6b6b;
+}
+
+.card-stack-hero__card .photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.card-stack-hero__card.has-photo .photo {
+  display: block;
+}
+
+.card-stack-hero__card .photo.before {
+  opacity: 1;
+}
+
+.card-stack-hero__card .photo.after {
+  opacity: 0;
+}
+
+.card-stack-hero__hint {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-muted, #6b6b6b);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.card-stack-hero__hint svg {
+  width: 22px;
+  height: 22px;
+  animation: card-stack-nudge 1.8s ease-in-out infinite;
+}
+
+@keyframes card-stack-nudge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-stack-hero {
+    height: 100svh;
+  }
+
+  .card-stack-hero__pin {
+    position: relative;
+    height: 100svh;
+  }
+
+  .card-stack-hero__copy {
+    min-height: auto;
+  }
+
+  .card-stack-hero__copy h1 {
+    opacity: 1;
+    transform: none;
+  }
+
+  .card-stack-hero__end-copy {
+    position: relative;
+    top: auto;
+    padding-top: 2rem;
+    opacity: 1;
+    transform: none;
+  }
+
+  .card-stack-hero__hint svg {
+    animation: none;
+  }
+}
