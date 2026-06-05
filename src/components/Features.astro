@@ -1,4 +1,7 @@
 ---
+import ChipDragDemo from './ChipDragDemo.astro';
+import WhatsAppDemo from './WhatsAppDemo.astro';
+
 interface Feature {
   title: string;
   body: string;
@@ -43,15 +46,26 @@ const features: Feature[] = [
         {
           features.map((f, i) => (
             <article
-              class="group flex h-full w-[min(86vw,40rem)] flex-none flex-col rounded-[var(--radius-card)] bg-card p-9 transition-shadow duration-500 ease-[var(--ease-out-soft)] hover:shadow-[0_10px_28px_-6px_rgba(16,16,16,0.12)] sm:w-[min(78vw,40rem)] sm:p-12"
+              class:list={[
+                'group flex h-full w-[80vw] flex-none flex-col rounded-[var(--radius-card)] bg-card p-9 transition-shadow duration-500 ease-[var(--ease-out-soft)] hover:shadow-[0_10px_28px_-6px_rgba(16,16,16,0.12)] sm:p-12',
+                i === 0 && 'overflow-visible',
+                i === 1 && 'overflow-hidden',
+              ]}
               data-slide
               data-index={i}
             >
-              <div class="flex h-full min-h-0 flex-1 flex-col justify-start items-start">
+              <div
+                class:list={[
+                  'flex h-full min-h-0 flex-1 flex-col justify-start items-start',
+                  i === 0 ? 'overflow-visible' : i === 1 ? 'relative overflow-visible' : '',
+                ]}
+              >
                 <h3 class="w-full min-h-[clamp(3.5rem,12svh,5.5rem)] text-balance text-2xl font-bold leading-[1.25] sm:text-[35px]">
                   {f.title}
                 </h3>
                 <p class="mt-4 w-full text-lg leading-relaxed text-muted">{f.body}</p>
+                {i === 0 && <ChipDragDemo />}
+                {i === 1 && <WhatsAppDemo />}
               </div>
             </article>
           ))

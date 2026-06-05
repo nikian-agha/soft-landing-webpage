@@ -191,7 +191,7 @@
 }
 
 .card-stack-hero__match--great {
-  color: #2563eb;
+  color: #4da8ff;
 }
 
 .card-stack-hero__match-arrow {
@@ -243,8 +243,10 @@
 }
 
 .card-stack-hero__match--great .card-stack-hero__match-text {
-  left: calc(var(--great-arrow-w) * -0.46);
-  top: calc(var(--great-arrow-w) * 0.92);
+  /* right edge of "match" aligns with arrow tail (≈40,156 in viewBox) */
+  left: calc(var(--great-arrow-w) * -0.4545);
+  top: calc(var(--great-arrow-w) * 1.015);
+  transform: translateX(-100%);
 }
 
 .card-stack-hero__hint {

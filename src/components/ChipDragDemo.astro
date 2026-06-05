@@ -1,0 +1,309 @@
+---
+import '../styles/chip-drag-demo.css';
+---
+
+<div class="chip-drag-demo" data-chip-drag-demo>
+  <div class="chip-drag-demo__scaler" data-chip-drag-scaler>
+    <div class="chip-drag-demo__stage" data-chip-drag-stage>
+      <div id="pref-card">
+        <div class="card-head">
+          <div style="width:34px;height:51px;flex-shrink:0;">
+            <svg width="34" height="51" viewBox="0 0 485 725" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M485 242.5C485 349.405 330.49 593.07 268.136 687.051C255.811 705.627 229.189 705.627 216.864 687.051C154.51 593.07 0 349.405 0 242.5C0 108.571 108.571 0 242.5 0C376.429 0 485 108.571 485 242.5Z" fill="#D6594D"></path>
+              <circle cx="242.5" cy="234.5" r="157.5" fill="#FFFBF3"></circle>
+              <ellipse cx="166" cy="235" rx="23" ry="31" fill="#2D424D"></ellipse>
+              <ellipse cx="318" cy="235" rx="23" ry="31" fill="#2D424D"></ellipse>
+              <path d="M215 291C229.5 305.5 255.5 305.5 270 291" stroke="#2D424D" stroke-width="20" stroke-linecap="round"></path>
+              <path d="M270 456.69C270 469.945 257.464 480.69 242 480.69C226.536 480.69 214 469.945 214 456.69C214 443.435 226.536 432.69 242 432.69C257.464 432.69 270 443.435 270 456.69Z" fill="#2D424D"></path>
+              <path d="M249.623 469.592C238.204 464.781 238.204 448.599 249.623 443.788L310.564 418.113C319.793 414.225 330 421.001 330 431.015V482.365C330 492.379 319.793 499.155 310.564 495.267L249.623 469.592Z" fill="#2D424D"></path>
+              <path d="M234.377 443.788C245.796 448.599 245.796 464.781 234.377 469.592L173.436 495.267C164.207 499.155 154 492.379 154 482.365L154 431.015C154 421.001 164.207 414.225 173.436 418.113L234.377 443.788Z" fill="#2D424D"></path>
+            </svg>
+          </div>
+          <h4 class="card-title">Have any specific preferences?</h4>
+        </div>
+
+        <div id="suggestions">
+          <div class="chip chip-sugg" id="c-parking">Parking</div>
+          <div class="chip chip-sugg" id="c-dishwasher">Dishwasher</div>
+          <div class="chip chip-sugg" id="c-pet">Pet Friendly</div>
+          <div class="chip chip-sugg" id="c-garages">Garages</div>
+          <div class="chip chip-sugg" id="c-balcony">Balcony</div>
+          <div class="chip chip-sugg" id="c-ensuite">Carpets</div>
+          <div class="chip chip-sugg" id="c-transport">Good Transport Links</div>
+        </div>
+
+        <div class="buckets">
+          <div id="ideal-bucket" class="bucket">
+            <div class="bucket-head">
+              <span class="bucket-label">Ideal</span>
+              <button type="button" class="btn-custom" id="ideal-custom-btn">Custom +</button>
+            </div>
+            <div id="ideal-chips" class="bucket-chips">
+              <div class="chip chip-ideal">Washing Machine <span class="cx">×</span></div>
+              <div class="chip chip-ideal">Garden <span class="cx">×</span></div>
+            </div>
+            <div id="typing-wrap">
+              <div id="typing-input"><span id="ti-text"></span><span id="ti-caret"></span></div>
+            </div>
+          </div>
+
+          <div id="avoid-bucket" class="bucket">
+            <div class="bucket-head">
+              <span class="bucket-label">Avoid</span>
+              <button type="button" class="btn-custom">Custom +</button>
+            </div>
+            <div id="avoid-chips" class="bucket-chips">
+              <div class="chip chip-avoid">Flat Share <span class="cx">×</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="float-chip" class="chip"></div>
+      <div id="ripple"></div>
+      <div id="cursor" aria-hidden="true">
+        <svg width="24" height="34" viewBox="0 0 24 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="chip-demo-csh" x="-30%" y="-15%" width="175%" height="165%">
+              <feDropShadow dx="1" dy="2" stdDeviation="2.2" flood-color="#000" flood-opacity="0.26"></feDropShadow>
+            </filter>
+          </defs>
+          <path
+            d="M3 2L3 26L9.5 20L13.5 31L17 29.5L13 18.5L21 18.5L3 2Z"
+            fill="white"
+            stroke="#111827"
+            stroke-width="1.5"
+            stroke-linejoin="round"
+            filter="url(#chip-demo-csh)"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const NATURAL_WIDTH = 880;
+  const BOTTOM_PADDING = 8;
+
+  for (const host of document.querySelectorAll<HTMLElement>('[data-chip-drag-demo]')) {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const scaler = host.querySelector<HTMLElement>('[data-chip-drag-scaler]');
+    const stage = host.querySelector<HTMLElement>('[data-chip-drag-stage]');
+    if (!scaler || !stage) continue;
+
+    const floatEl = stage.querySelector<HTMLElement>('#float-chip');
+    const rippleEl = stage.querySelector<HTMLElement>('#ripple');
+    const cursorEl = stage.querySelector<HTMLElement>('#cursor');
+    const card = stage.querySelector<HTMLElement>('#pref-card');
+    const idealBkt = stage.querySelector<HTMLElement>('#ideal-bucket');
+    const avoidBkt = stage.querySelector<HTMLElement>('#avoid-bucket');
+    const idealCps = stage.querySelector<HTMLElement>('#ideal-chips');
+    const avoidCps = stage.querySelector<HTMLElement>('#avoid-chips');
+    const customBtn = stage.querySelector<HTMLElement>('#ideal-custom-btn');
+    const typingWrap = stage.querySelector<HTMLElement>('#typing-wrap');
+    const tiText = stage.querySelector<HTMLElement>('#ti-text');
+
+    if (
+      !floatEl ||
+      !rippleEl ||
+      !cursorEl ||
+      !card ||
+      !idealBkt ||
+      !avoidBkt ||
+      !idealCps ||
+      !avoidCps ||
+      !customBtn ||
+      !typingWrap ||
+      !tiText
+    ) {
+      continue;
+    }
+
+    let currentScale = 1;
+
+    const rescale = () => {
+      const availableHeight = Math.max(0, host.clientHeight - BOTTOM_PADDING);
+      const widthScale = host.clientWidth / NATURAL_WIDTH;
+      const heightScale = availableHeight / card.offsetHeight;
+      currentScale = Math.max(0.1, Math.min(widthScale, heightScale));
+      scaler.style.transform = `scale(${currentScale})`;
+    };
+
+    rescale();
+    const ro = new ResizeObserver(rescale);
+    ro.observe(host);
+    window.addEventListener('resize', rescale);
+
+    if (reduce) continue;
+
+    const TIP_X = 3;
+    const TIP_Y = 2;
+    let cx = 0;
+    let cy = 0;
+    const added: HTMLElement[] = [];
+
+    const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+    const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
+
+    const ctr = (el: Element) => {
+      const sr = stage.getBoundingClientRect();
+      const er = el.getBoundingClientRect();
+      return {
+        x: (er.left - sr.left + er.width / 2) / currentScale,
+        y: (er.top - sr.top + er.height / 2) / currentScale,
+      };
+    };
+
+    const place = (x: number, y: number) => {
+      cx = x;
+      cy = y;
+      cursorEl.style.transition = 'none';
+      cursorEl.style.transform = `translate(${x - TIP_X}px, ${y - TIP_Y}px)`;
+    };
+
+    const tween = (tx: number, ty: number, dur: number, ease: (t: number) => number, withChip: boolean) =>
+      new Promise<void>((resolve) => {
+        const sx = cx;
+        const sy = cy;
+        const t0 = performance.now();
+
+        const step = (now: number) => {
+          const p = Math.min((now - t0) / dur, 1);
+          const e = ease(p);
+          cx = sx + (tx - sx) * e;
+          cy = sy + (ty - sy) * e;
+          cursorEl.style.transform = `translate(${cx - TIP_X}px, ${cy - TIP_Y}px)`;
+          if (withChip) floatEl.style.transform = `translate(${cx + 10}px, ${cy + 7}px) scale(1.04)`;
+          if (p < 1) requestAnimationFrame(step);
+          else resolve();
+        };
+
+        requestAnimationFrame(step);
+      });
+
+    const doClick = () => {
+      rippleEl.style.left = `${cx}px`;
+      rippleEl.style.top = `${cy}px`;
+      rippleEl.classList.remove('ripple-go');
+      void rippleEl.offsetWidth;
+      rippleEl.classList.add('ripple-go');
+    };
+
+    const liftChip = (el: HTMLElement, label: string) => {
+      el.classList.add('chip-ghost');
+      floatEl.className = 'chip chip-sugg';
+      floatEl.innerHTML = `${label} <span class="cx">×</span>`;
+      floatEl.style.transform = `translate(${cx + 10}px, ${cy + 7}px) scale(1.04)`;
+      floatEl.style.display = 'inline-flex';
+    };
+
+    const dropIn = (label: string, kind: string, container: HTMLElement) => {
+      floatEl.style.display = 'none';
+      const c = document.createElement('div');
+      c.className = `chip ${kind} spring-in`;
+      c.innerHTML = `${label} <span class="cx">×</span>`;
+      container.appendChild(c);
+      added.push(c);
+    };
+
+    const fadeCard = (to: string, ms: number, timing: string) => {
+      card.style.transition = `opacity ${ms}ms ${timing}`;
+      card.style.opacity = to;
+      return sleep(ms + 30);
+    };
+
+    const typeText = async (text: string) => {
+      tiText.textContent = '';
+      const delays = [110, 90, 130, 80, 95, 115, 85, 100, 120, 90, 85, 110, 95, 80, 100, 120];
+      for (let i = 0; i < text.length; i++) {
+        await sleep(delays[i % delays.length]);
+        tiText.textContent += text[i];
+      }
+    };
+
+    const reset = () => {
+      added.forEach((c) => c.remove());
+      added.length = 0;
+      floatEl.style.display = 'none';
+      idealBkt.classList.remove('hl-ideal');
+      avoidBkt.classList.remove('hl-avoid');
+      stage.querySelectorAll('.chip-ghost').forEach((e) => e.classList.remove('chip-ghost'));
+      customBtn.classList.remove('active');
+      typingWrap.style.display = 'none';
+      tiText.textContent = '';
+    };
+
+    const cycle = async () => {
+      reset();
+      rescale();
+
+      const suggEl = stage.querySelector<HTMLElement>('#suggestions');
+      if (!suggEl) return;
+
+      const sC = ctr(suggEl);
+      place(sC.x - 340, sC.y - 8);
+      card.style.transition = 'none';
+      card.style.opacity = '1';
+      cursorEl.style.opacity = '0';
+      cursorEl.style.transition = 'none';
+
+      await sleep(300);
+      cursorEl.style.transition = 'opacity 0.35s ease';
+      cursorEl.style.opacity = '1';
+      await sleep(600);
+
+      const enEl = stage.querySelector<HTMLElement>('#c-ensuite');
+      if (!enEl) return;
+
+      await tween(ctr(enEl).x, ctr(enEl).y, 880, easeOut, false);
+      await sleep(360);
+      doClick();
+      await sleep(160);
+      liftChip(enEl, 'Carpets');
+      await sleep(220);
+
+      const aC = ctr(avoidBkt);
+      setTimeout(() => avoidBkt.classList.add('hl-avoid'), 650);
+      await tween(aC.x - 28, aC.y + 18, 1100, easeInOut, true);
+      await sleep(200);
+      avoidBkt.classList.remove('hl-avoid');
+      dropIn('Carpets', 'chip-avoid', avoidCps);
+      await sleep(820);
+
+      await tween(ctr(customBtn).x, ctr(customBtn).y, 800, easeOut, false);
+      await sleep(340);
+
+      doClick();
+      customBtn.classList.add('active');
+      await sleep(180);
+      customBtn.classList.remove('active');
+
+      typingWrap.style.display = 'block';
+
+      await sleep(80);
+      const twC = ctr(typingWrap);
+      await tween(twC.x - 40, twC.y, 320, easeOut, false);
+      await sleep(160);
+
+      await typeText('Lots of natural sunlight');
+      await sleep(480);
+
+      typingWrap.style.display = 'none';
+      dropIn('Lots of natural sunlight', 'chip-ideal', idealCps);
+      await sleep(1100);
+
+      cursorEl.style.transition = 'opacity 0.38s ease';
+      cursorEl.style.opacity = '0';
+      await sleep(420);
+      await fadeCard('0', 240, 'ease-in');
+      reset();
+      await sleep(80);
+      await fadeCard('1', 340, 'ease-out');
+
+      cycle();
+    };
+
+    window.setTimeout(cycle, 800);
+  }
+</script>

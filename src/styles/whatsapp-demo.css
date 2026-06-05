@@ -1,0 +1,27 @@
+.whatsapp-demo {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: -2.25rem;
+  justify-content: center;
+  overflow: visible;
+}
+
+@media (min-width: 640px) {
+  .whatsapp-demo {
+    margin-bottom: -3rem;
+  }
+}
+
+.whatsapp-demo__frame {
+  width: 50%;
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  pointer-events: none;
+  background: transparent;
+  overflow: hidden;
+}

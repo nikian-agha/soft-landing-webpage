@@ -1,0 +1,328 @@
+.chip-drag-demo {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  margin-top: 1rem;
+  overflow: visible;
+  cursor: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.chip-drag-demo__scaler {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 880px;
+  transform-origin: bottom left;
+  will-change: transform;
+  pointer-events: none;
+}
+
+.chip-drag-demo__stage {
+  position: relative;
+  width: 880px;
+  max-width: none;
+}
+
+/* ── CARD ─────────────────────────────── */
+.chip-drag-demo #pref-card {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 24px;
+  padding: 28px 32px 32px;
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.07), 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.chip-drag-demo .card-head {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.chip-drag-demo .card-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.02em;
+}
+
+/* ── SUGGESTIONS ──────────────────────── */
+.chip-drag-demo #suggestions {
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 16px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+  min-height: 62px;
+}
+
+/* ── CHIPS ────────────────────────────── */
+.chip-drag-demo .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 9999px;
+  font-family: var(--font-display);
+  white-space: nowrap;
+  transition: opacity 0.2s ease;
+}
+
+.chip-drag-demo .chip-sugg {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  color: #374151;
+  padding: 7px 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.chip-drag-demo .chip-ideal {
+  background: #dcfce7;
+  border: 1.5px solid #bbf7d0;
+  color: #166534;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.chip-drag-demo .chip-avoid {
+  background: #fee2e2;
+  border: 1.5px solid #fecaca;
+  color: #991b1b;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.chip-drag-demo .cx {
+  font-size: 11px;
+  opacity: 0.45;
+  font-weight: 400;
+  line-height: 1;
+}
+
+.chip-drag-demo .chip-ghost {
+  opacity: 0.15 !important;
+  transition: opacity 0.18s ease !important;
+}
+
+/* ── BUCKETS ──────────────────────────── */
+.chip-drag-demo .buckets {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.chip-drag-demo .bucket {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 18px 20px;
+  min-height: 132px;
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    background 0.22s ease;
+}
+
+.chip-drag-demo .bucket.hl-ideal {
+  border-color: #86efac;
+  box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.22);
+  background: #f0fdf4;
+}
+
+.chip-drag-demo .bucket.hl-avoid {
+  border-color: #fca5a5;
+  box-shadow: 0 0 0 3px rgba(252, 165, 165, 0.22);
+  background: #fff5f5;
+}
+
+.chip-drag-demo .bucket-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 13px;
+}
+
+.chip-drag-demo .bucket-label {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.chip-drag-demo .btn-custom {
+  background: #fff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 9999px;
+  padding: 5px 14px;
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: default;
+  outline: none;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    color 0.18s ease;
+}
+
+.chip-drag-demo .btn-custom.active {
+  background: #f9c515;
+  border-color: #f9c515;
+  color: #111827;
+}
+
+.chip-drag-demo .bucket-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* ── TYPING INPUT ─────────────────────── */
+.chip-drag-demo #typing-wrap {
+  display: none;
+  margin-top: 10px;
+}
+
+.chip-drag-demo #typing-input {
+  display: inline-flex;
+  align-items: center;
+  background: #fff;
+  border: 2px solid #f9c515;
+  border-radius: 9999px;
+  padding: 7px 16px;
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: #374151;
+  box-shadow: 0 0 0 3px rgba(249, 197, 21, 0.15);
+  min-width: 10px;
+  white-space: nowrap;
+}
+
+.chip-drag-demo #ti-text {
+  letter-spacing: 0;
+}
+
+.chip-drag-demo #ti-caret {
+  display: inline-block;
+  width: 1.5px;
+  height: 15px;
+  background: #374151;
+  vertical-align: text-bottom;
+  margin-left: 1px;
+  flex-shrink: 0;
+  animation: chip-demo-blink 0.65s step-end infinite;
+}
+
+@keyframes chip-demo-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ── FLOAT CHIP ───────────────────────── */
+.chip-drag-demo #float-chip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 900;
+  display: none;
+  box-shadow:
+    0 10px 32px rgba(0, 0, 0, 0.18),
+    0 3px 8px rgba(0, 0, 0, 0.07);
+  will-change: transform;
+}
+
+/* ── RIPPLE ───────────────────────────── */
+.chip-drag-demo #ripple {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(249, 197, 21, 0.28);
+  pointer-events: none;
+  z-index: 800;
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0);
+}
+
+.chip-drag-demo .ripple-go {
+  animation: chip-demo-ripple-pop 0.4s ease-out forwards;
+}
+
+@keyframes chip-demo-ripple-pop {
+  0% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.6);
+  }
+}
+
+/* ── SPRING IN ────────────────────────── */
+@keyframes chip-demo-spring-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.65) translateY(-8px);
+  }
+
+  55% {
+    opacity: 1;
+    transform: scale(1.09) translateY(0);
+  }
+
+  78% {
+    transform: scale(0.97);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.chip-drag-demo .spring-in {
+  animation: chip-demo-spring-in 0.46s cubic-bezier(0.34, 1.3, 0.64, 1) forwards;
+}
+
+/* ── CURSOR ───────────────────────────── */
+.chip-drag-demo #cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chip-drag-demo {
+    cursor: auto;
+    user-select: auto;
+    -webkit-user-select: auto;
+  }
+
+  .chip-drag-demo #cursor {
+    display: none;
+  }
+}
