@@ -81,6 +81,7 @@ let rafId = 0;
 let plane: HTMLDivElement;
 let hint: HTMLElement | null;
 let startCopy: HTMLElement | null;
+let startCopyWrap: HTMLElement | null;
 let endCopy: HTMLElement | null;
 let matchLabels: HTMLElement | null;
 let matchGood: HTMLElement | null;
@@ -235,10 +236,10 @@ function render(rawP: number) {
 
   if (hint) hint.style.opacity = String(clamp(1 - P / 0.04, 0, 1));
 
-  if (startCopy) {
+  if (startCopyWrap || startCopy) {
     const t = smooth(clamp(rawP / 0.14, 0, 1));
-    startCopy.style.opacity = String(1 - t);
-    startCopy.style.transform = `translateY(${-t * 28}px)`;
+    if (startCopyWrap) startCopyWrap.style.opacity = String(1 - t);
+    if (startCopy) startCopy.style.transform = `translateY(${-t * 28}px)`;
   }
 
   if (endCopy) {
@@ -306,6 +307,7 @@ export function initCardStackHero() {
   section = document.getElementById('top');
   plane = document.getElementById('hero-card-plane') as HTMLDivElement | null;
   hint = document.getElementById('hero-card-hint');
+  startCopyWrap = document.getElementById('hero-start-copy-wrap');
   startCopy = document.getElementById('hero-start-copy');
   endCopy = document.getElementById('hero-end-copy');
   matchLabels = document.getElementById('hero-match-labels');
@@ -319,10 +321,8 @@ export function initCardStackHero() {
   if (reduce) {
     section.style.height = '100svh';
     hint?.remove();
-    if (startCopy) {
-      startCopy.style.opacity = '1';
-      startCopy.style.transform = 'none';
-    }
+    if (startCopyWrap) startCopyWrap.style.opacity = '1';
+    if (startCopy) startCopy.style.transform = 'none';
     if (endCopy) {
       endCopy.style.opacity = '1';
       endCopy.style.transform = 'none';

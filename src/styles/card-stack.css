@@ -8,6 +8,16 @@
   position: relative;
   z-index: 20;
   container-type: inline-size;
+  will-change: opacity;
+}
+
+.card-stack-hero__copy::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: rgba(16, 16, 16, 0.62);
+  pointer-events: none;
 }
 
 .card-stack-hero__copy h1 {
@@ -18,7 +28,7 @@
   font-weight: 700;
   letter-spacing: 0;
   text-wrap: balance;
-  will-change: opacity, transform;
+  will-change: transform;
 }
 
 @media (min-width: 768px) {
@@ -294,10 +304,10 @@
 
   .card-stack-hero__copy {
     min-height: auto;
+    opacity: 1;
   }
 
   .card-stack-hero__copy h1 {
-    opacity: 1;
     transform: none;
   }
 
